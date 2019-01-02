@@ -17,7 +17,11 @@ config = ConfigObj("config.ini")
 project_folder = os.path.abspath(os.path.dirname(sys.argv[0]))
 drivers_path = project_folder + "/drivers/" + config["driver"]
 
-browser = Chrome(executable_path=drivers_path)
+# Configure the browser to be headless
+options = Options()
+options.set_headless()
+
+browser = Chrome(executable_path = drivers_path, options = options)
 browser.get('https://www.passaportonline.poliziadistato.it/logInCittadino.do')
 
 # Login to the portal
