@@ -1,6 +1,7 @@
 import os
 import sys
 import smtplib
+import subprocess
 from configobj import ConfigObj
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
@@ -10,6 +11,9 @@ def send_availability_email (sender, recipient, message):
     s = smtplib.SMTP('localhost')
     s.sendmail(sender, recipient, message)
     s.quit()
+
+def show_notification (message):
+    subprocess.Popen(['notify-send', "Passaporto Online", message])
 
 config = ConfigObj("config.ini")
 
@@ -49,4 +53,4 @@ for l in locations:
 
     if config["location"] in location_name.lower():
         if location_availability != "no":
-            send_availability_email("", "", "The location " + location_name + " is available")
+            show_notification("The location " + location_name + " is available")
