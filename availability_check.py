@@ -1,9 +1,15 @@
 import os
 import sys
+import smtplib
 from configobj import ConfigObj
 from selenium.webdriver import Chrome
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+
+def send_availability_email (sender, recipient, message):
+    s = smtplib.SMTP('localhost')
+    s.sendmail(sender, recipient, message)
+    s.quit()
 
 config = ConfigObj("config.ini")
 
@@ -39,4 +45,4 @@ for l in locations:
 
     if config["location"] in location_name.lower():
         if location_availability != "no":
-            print "Location available"
+            send_availability_email("", "", "The location " + location_name + " is available")
