@@ -1,2 +1,4 @@
 creds.ini
+config.ini
 drivers/*
+.vscode/*
