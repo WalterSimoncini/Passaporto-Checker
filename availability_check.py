@@ -15,10 +15,9 @@ def send_availability_email (sender, recipient, message):
 def show_notification (message):
     subprocess.Popen(['notify-send', "Passaporto Online", message])
 
-config = ConfigObj("config.ini")
-
 # Add the selenium drivers to PATH
 project_folder = os.path.abspath(os.path.dirname(sys.argv[0]))
+config = ConfigObj(project_folder + "/config.ini")
 drivers_path = project_folder + "/drivers/" + config["driver"]
 
 # Configure the browser to be headless
@@ -54,3 +53,5 @@ for l in locations:
     if config["location"] in location_name.lower():
         if location_availability != "no":
             show_notification("The location " + location_name + " is available")
+        else:
+            show_notification("The location " + location_name + " is not available")
