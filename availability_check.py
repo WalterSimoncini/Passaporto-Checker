@@ -4,7 +4,7 @@ import smtplib
 import subprocess
 from configobj import ConfigObj
 from selenium.webdriver import Chrome
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.keys import Keys
 
 def send_availability_email (sender, recipient, message):
@@ -18,13 +18,15 @@ def show_notification (message):
 # Add the selenium drivers to PATH
 project_folder = os.path.abspath(os.path.dirname(sys.argv[0]))
 config = ConfigObj(project_folder + "/config.ini")
-drivers_path = project_folder + "/drivers/" + config["driver"]
 
 # Configure the browser to be headless
-options = Options()
-options.set_headless()
+chrome_options = ChromeOptions()
+# Disabling the sandboxing is needed in order to avoid crashes in the Docker container
+chrome_options.add_argument('--no-sandbox')
+chrome_options.add_argument('--headless')
+chrome_options.add_argument('--disable-gpu')
 
-browser = Chrome(executable_path = drivers_path, options = options)
+browser = Chrome(chrome_options = chrome_options)
 browser.get('https://www.passaportonline.poliziadistato.it/logInCittadino.do')
 
 # Login to the portal
@@ -52,6 +54,6 @@ for l in locations:
 
     if config["location"] in location_name.lower():
         if location_availability != "no":
-            show_notification("The location " + location_name + " is available")
+            print("The location " + location_name + " is available")
         else:
-            show_notification("The location " + location_name + " is not available")
+            print("The location " + location_name + " is not available")
