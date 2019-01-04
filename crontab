@@ -1,0 +1,2 @@
+*/2 * * * * python /usr/workspace/availability_check.py >> /var/log/cron.log 2>&1
+
