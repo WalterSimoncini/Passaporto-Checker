@@ -1,6 +1,6 @@
 FROM joyzoursky/python-chromedriver:2.7-selenium
 RUN apt-get update && apt-get -y install cron
-RUN pip install configobj && pip install selenium
+RUN pip install configobj && pip install selenium && pip install requests
 
 RUN mkdir /etc/cron.h
 ADD crontab /etc/cron.h/passaporto

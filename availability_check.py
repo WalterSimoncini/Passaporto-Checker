@@ -1,19 +1,23 @@
 import os
 import sys
 import smtplib
+import requests
+import datetime
 import subprocess
 from configobj import ConfigObj
 from selenium.webdriver import Chrome
 from selenium.webdriver import ChromeOptions
 from selenium.webdriver.common.keys import Keys
 
-def send_availability_email (sender, recipient, message):
-    s = smtplib.SMTP('localhost')
-    s.sendmail(sender, recipient, message)
-    s.quit()
+def send_availability_mail(config, subject, body):
+    api_endpoint = "https://api.mailgun.net/v3/" + config["mailgun_domain"] + "/messages"
+    auth = ("api", config["mailgun_api_key"])
+    data = {"from": "Passaporto Checker <mailgun@" + config["mailgun_domain"] + ">",
+              "to": config["recipient_mail"],
+              "subject": subject,
+              "text": body}
 
-def show_notification (message):
-    subprocess.Popen(['notify-send', "Passaporto Online", message])
+    return requests.post(api_endpoint, auth = auth, data = data)
 
 # Add the selenium drivers to PATH
 project_folder = os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -53,7 +57,13 @@ for l in locations:
     location_availability = fields[5].text.lower()
 
     if config["location"] in location_name.lower():
+        current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M") + ": "
+        log_text = None
+        
         if location_availability != "no":
-            print("The location " + location_name + " is available")
+            log_text = current_time + "The location " + location_name + " is available"
+            send_availability_mail(config, "Targeted location available", log_text)
         else:
-            print("The location " + location_name + " is not available")
+            log_text = current_time + "The location " + location_name + " is not available"
+        
+        print(log_text)
