@@ -1,2 +1,2 @@
-*/2 * * * * python /usr/workspace/availability_check.py >> /var/log/cron.log 2>&1
-
+PYTHONPATH=/usr/local/lib/python2.7/site-packages
+*/15 * * * * python /usr/workspace/availability_check.py >> /var/log/cron.log 2>&1
