@@ -1,5 +1,6 @@
 import os
 import sys
+import signal
 import smtplib
 import requests
 import datetime
@@ -18,6 +19,16 @@ def send_availability_mail(config, subject, body):
               "text": body}
 
     return requests.post(api_endpoint, auth = auth, data = data)
+
+def kill_chromedriver_instances():
+    p = subprocess.Popen(['ps', '-A'], stdout = subprocess.PIPE)
+    out, err = p.communicate()
+
+    if err == None:
+        for line in out.splitlines():
+            if "chromedriver" in line:
+                pid = pid = int(line.split(None, 1)[0])
+                os.kill(pid, signal.SIGKILL)
 
 # Add the selenium drivers to PATH
 project_folder = os.path.abspath(os.path.dirname(sys.argv[0]))
@@ -69,3 +80,6 @@ for l in locations:
         print(log_text)
 
 browser.close()
+
+# Cleanup leftover chromedriver instances in order to free up memory
+kill_chromedriver_instances()
