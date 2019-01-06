@@ -67,3 +67,5 @@ for l in locations:
             log_text = current_time + "The location " + location_name + " is not available"
         
         print(log_text)
+
+browser.close()
