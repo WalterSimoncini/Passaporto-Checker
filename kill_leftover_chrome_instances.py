@@ -11,7 +11,7 @@ def kill_chrome_instances():
 
     if err == None:
         for line in out.splitlines():
-            if "chrome" in line:
+            if "chrome" in line or "chromedriver" in line:
                 pid = pid = int(line.split(None, 1)[0])
                 os.kill(pid, signal.SIGKILL)
 
