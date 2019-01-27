@@ -14,9 +14,10 @@ To use the tool follow these steps:
 
 ### Email notifications setup
 
-- Head to mailgun.com, sign up and confirm your email address
+- Head to mailgun.com, sign up and confirm your email address (the free plan should be more than enough to notify you of available appointments)
 - Go to the `Domain` tab and copy the domain to your configuration file
 - Click on your domain and copy the api key to your configuration file
+- Add your email as an authorized recipient (free plan only) and copy that email address to the configuration file
 
 ### Docker deployment
 
